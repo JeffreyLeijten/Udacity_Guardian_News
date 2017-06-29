@@ -9,8 +9,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import static android.R.attr.value;
-
 /**
  * Created by Jeffrey on 28-6-2017.
  */

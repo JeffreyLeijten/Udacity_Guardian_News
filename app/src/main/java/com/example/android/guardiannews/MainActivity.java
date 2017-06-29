@@ -8,9 +8,9 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,14 +20,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Article>> {
 
     public static final String LOG_TAG = MainActivity.class.getName();
-    private final static String USGS_REQUEST_URL = "https://content.guardianapis.com/search?";
+    private final static String GUARDIAN_REQUEST_URL = "https://content.guardianapis.com/search?";
     private ArticleAdapter adapter;
 
     @Override
@@ -38,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         ListView articleListView = (ListView) findViewById(R.id.list);
 
         articleListView.setEmptyView(findViewById(R.id.empty_view));
-        ((TextView)findViewById(R.id.empty_view)).setText(R.string.no_articles);
+        ((TextView) findViewById(R.id.empty_view)).setText(R.string.no_articles);
 
         adapter = new ArticleAdapter(this, new ArrayList<Article>());
 
@@ -60,17 +58,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         runLoader();
     }
 
-    private void runLoader(){
+    private void runLoader() {
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
-        if (networkInfo != null && networkInfo.isConnected()){
+        if (networkInfo != null && networkInfo.isConnected()) {
 
             LoaderManager loaderManager = getLoaderManager();
 
             loaderManager.restartLoader(1, null, this);
         } else {
-            ((TextView)findViewById(R.id.empty_view)).setText(R.string.no_internet_connection);
+            ((TextView) findViewById(R.id.empty_view)).setText(R.string.no_internet_connection);
         }
     }
 
@@ -81,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 getString(R.string.settings_page_size_key),
                 getString(R.string.settings_page_size_default));
 
-        Uri baseUri = Uri.parse(USGS_REQUEST_URL);
+        Uri baseUri = Uri.parse(GUARDIAN_REQUEST_URL);
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
         uriBuilder.appendQueryParameter("page-size", pageSize);
@@ -96,7 +94,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onLoadFinished(Loader<List<Article>> loader, List<Article> articles) {
         adapter.clear();
 
-        ((TextView)findViewById(R.id.empty_view)).setText(R.string.no_articles);
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
+        if (networkInfo != null && networkInfo.isConnected()) {
+            ((TextView) findViewById(R.id.empty_view)).setText(R.string.no_articles);
+        } else {
+            ((TextView) findViewById(R.id.empty_view)).setText(R.string.no_internet_connection);
+        }
 
         if (articles != null && !articles.isEmpty()) {
             adapter.addAll(articles);
@@ -121,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             Intent settingsIntent = new Intent(this, SettingsActivity.class);
             startActivity(settingsIntent);
             return true;
-        } else if(id == R.id.refresh){
+        } else if (id == R.id.refresh) {
             runLoader();
         }
         return super.onOptionsItemSelected(item);

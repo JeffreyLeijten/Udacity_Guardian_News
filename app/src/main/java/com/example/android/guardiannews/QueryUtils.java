@@ -149,9 +149,9 @@ public final class QueryUtils {
 
                 String url = currentarticle.getString("webUrl");
 
-                Article book = new Article(title, section, publicationDate, url);
+                Article article = new Article(title, section, publicationDate, url);
 
-                articles.add(book);
+                articles.add(article);
                 } catch (ParseException e){
                     Log.e(LOG_TAG, "Problem parsing date: " + e);
                 }
@@ -161,7 +161,7 @@ public final class QueryUtils {
             // If an error is thrown when executing any of the above statements in the "try" block,
             // catch the exception here, so the app doesn't crash. Print a log message
             // with the message from the exception.
-            Log.e("QueryUtils", "Problem parsing the book JSON results", e);
+            Log.e("QueryUtils", "Problem parsing the article JSON results", e);
         }
         return articles;
     }

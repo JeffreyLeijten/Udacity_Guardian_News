@@ -1,25 +1,16 @@
 package com.example.android.guardiannews;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-
-import org.w3c.dom.Text;
-
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
-
-import static android.R.attr.format;
 
 /**
  * Created by Jeffrey on 26-6-2017.
